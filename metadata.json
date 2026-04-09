@@ -1,0 +1,9 @@
+{
+  "name": "Annas Abdurrahman Portfolio",
+  "description": "An interactive, narrative-driven personal portfolio for Annas Abdurrahman, a Fullstack Software Developer.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
