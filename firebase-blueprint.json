@@ -1,0 +1,178 @@
+{
+  "entities": {
+    "PortfolioContent": {
+      "title": "Portfolio Content",
+      "description": "Global settings and content for the portfolio",
+      "type": "object",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "subtitle": { "type": "string" },
+            "about": { "type": "string" }
+          }
+        },
+        "projects": {
+          "type": "array",
+          "items": { "$ref": "Project" }
+        },
+        "experiences": {
+          "type": "array",
+          "items": { "$ref": "Experience" }
+        },
+        "education": {
+          "type": "array",
+          "items": { "$ref": "Education" }
+        },
+        "certifications": {
+          "type": "array",
+          "items": { "$ref": "Certification" }
+        },
+        "awards": {
+          "type": "array",
+          "items": { "$ref": "Award" }
+        },
+        "skills": {
+          "type": "array",
+          "items": { "$ref": "Skill" }
+        },
+        "languages": {
+          "type": "array",
+          "items": { "$ref": "Language" }
+        }
+      }
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A portfolio project",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "image": { "type": "string" },
+        "date": { "type": "string" },
+        "description": { "type": "string" },
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["image", "video"] },
+              "url": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "Experience": {
+      "title": "Experience",
+      "description": "Work experience",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "company": { "type": "string" },
+        "role": { "type": "string" },
+        "period": { "type": "string" },
+        "location": { "type": "string" },
+        "description": { "type": "array", "items": { "type": "string" } },
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["image", "pdf"] },
+              "url": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "Education": {
+      "title": "Education",
+      "description": "Educational background",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "institution": { "type": "string" },
+        "degree": { "type": "string" },
+        "period": { "type": "string" },
+        "description": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "Certification": {
+      "title": "Certification",
+      "description": "Professional certification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "issuer": { "type": "string" },
+        "date": { "type": "string" },
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["image", "pdf"] },
+              "url": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "Award": {
+      "title": "Award",
+      "description": "Honor or award",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string" },
+        "media": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["image", "pdf"] },
+              "url": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "Skill": {
+      "title": "Skill",
+      "description": "Technical skill category",
+      "type": "object",
+      "properties": {
+        "category": { "type": "string" },
+        "items": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "Language": {
+      "title": "Language",
+      "description": "Language proficiency",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "proficiency": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/content/main": {
+      "schema": "PortfolioContent",
+      "description": "The main portfolio content document"
+    }
+  }
+}

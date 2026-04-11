@@ -1,69 +1,99 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
-
-
 import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 const CustomCursor: React.FC = () => {
-  const [isHovering, setIsHovering] = useState(false);
-  
-  // Initialize off-screen to prevent flash
-  const mouseX = useMotionValue(-100);
-  const mouseY = useMotionValue(-100);
-  
-  // Smooth spring animation
-  const springConfig = { damping: 20, stiffness: 350, mass: 0.1 }; 
-  const x = useSpring(mouseX, springConfig);
-  const y = useSpring(mouseY, springConfig);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth springs for the outer ring
+  const springConfig = { damping: 25, stiffness: 250 };
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    const updateMousePosition = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+      
+      if (!isVisible) setIsVisible(true);
 
+      // Check if hovering over interactive elements
       const target = e.target as HTMLElement;
-      const clickable = target.closest('button') || 
-                        target.closest('a') || 
-                        target.closest('[data-hover="true"]');
-      setIsHovering(!!clickable);
+      const isInteractive = 
+        target.closest('button') || 
+        target.closest('a') || 
+        target.closest('.cursor-pointer') ||
+        window.getComputedStyle(target).cursor === 'pointer';
+      
+      setIsHovered(!!isInteractive);
     };
 
-    window.addEventListener('mousemove', updateMousePosition, { passive: true });
-    return () => window.removeEventListener('mousemove', updateMousePosition);
-  }, [mouseX, mouseY]);
+    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => setIsVisible(true);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
+    document.addEventListener('mouseenter', handleMouseEnter);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+      document.removeEventListener('mouseenter', handleMouseEnter);
+    };
+  }, [mouseX, mouseY, isVisible]);
+
+  if (!isVisible) return null;
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 z-[9999] pointer-events-none mix-blend-difference flex items-center justify-center hidden md:flex will-change-transform"
-      style={{ x, y, translateX: '-50%', translateY: '-50%' }}
-    >
-      {/* This div is the actual cursor "body" and will handle the scaling and text centering */}
-      {/* Changed base size to 80px diameter (40px radius) */}
+    <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">
+      {/* Outer Ring */}
       <motion.div
-        className="relative rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.3)] flex items-center justify-center"
-        style={{ width: 80, height: 80 }}
-        animate={{
-          // Scaled by 1.5 to become 120px diameter (60px radius) when hovering
-          scale: isHovering ? 1.5 : 1, 
+        className="fixed top-0 left-0 w-8 h-8 border-2 border-ink-black rounded-full mix-blend-difference"
+        style={{
+          x: cursorX,
+          y: cursorY,
+          translateX: '-50%',
+          translateY: '-50%',
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 25 }}
-      >
-        {/* Text directly inside the scalable cursor body, centered by flex parent */}
-        <motion.span 
-          className="z-10 text-black font-black uppercase tracking-widest text-sm overflow-hidden whitespace-nowrap"
-          initial={{ opacity: 0 }}
-          animate={{ 
-            opacity: isHovering ? 1 : 0,
+        animate={{
+          scale: isHovered ? 2 : 1,
+          backgroundColor: isHovered ? 'rgba(118, 174, 219, 0.3)' : 'rgba(255, 255, 255, 0)',
+          borderColor: isHovered ? '#76AEDB' : '#1E1E1E',
+        }}
+      />
+      
+      {/* Inner Dot */}
+      <motion.div
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-ink-black rounded-full"
+        style={{
+          x: mouseX,
+          y: mouseY,
+          translateX: '-50%',
+          translateY: '-50%',
+        }}
+        animate={{
+          scale: isHovered ? 0 : 1,
+        }}
+      />
+
+      {/* Hover Label (Optional Sticker Effect) */}
+      {isHovered && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+          animate={{ opacity: 1, scale: 1, rotate: 5 }}
+          className="fixed top-0 left-0 ml-6 mt-6 bg-sticker-yellow px-2 py-0.5 neo-brutal-border text-[10px] font-bold uppercase tracking-tighter"
+          style={{
+            x: mouseX,
+            y: mouseY,
           }}
-          transition={{ duration: 0.2 }}
         >
-          View
-        </motion.span>
-      </motion.div>
-    </motion.div>
+          Click!
+        </motion.div>
+      )}
+    </div>
   );
 };
 

@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Portfolio content is publicly readable
+    match /content/{document} {
+      allow read: if true;
+      // Write access restricted to admin (we'll use a secret password in the app, 
+      // but for Firestore rules, we should ideally use Auth. 
+      // Since user requested NO AUTH and just a password, we'll allow write for now 
+      // but warn that this is insecure without Auth.)
+      allow write: if true; 
+    }
+  }
+}

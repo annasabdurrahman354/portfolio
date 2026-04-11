@@ -26,6 +26,12 @@ export interface Experience {
   period: string;
   location: string;
   description: string[];
+  media?: {
+    type: 'image' | 'pdf';
+    url: string;
+    title: string;
+    description?: string;
+  }[];
 }
 
 export interface Education {
@@ -41,12 +47,24 @@ export interface Certification {
   title: string;
   issuer: string;
   date?: string;
+  media?: {
+    type: 'image' | 'pdf';
+    url: string;
+    title: string;
+    description?: string;
+  }[];
 }
 
 export interface Award {
   id: string;
   title: string;
   date: string;
+  media?: {
+    type: 'image' | 'pdf';
+    url: string;
+    title: string;
+    description?: string;
+  }[];
 }
 
 export interface Skill {

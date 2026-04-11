@@ -6,204 +6,15 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { Ticket, Globe, Zap, Music, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Github, Linkedin, Mail, ExternalLink, Code, Terminal, Smartphone, Database } from 'lucide-react';
+import { Ticket, Globe, Zap, Music, MapPin, Menu, X, Calendar, Play, ChevronLeft, ChevronRight, Github, Linkedin, Mail, ExternalLink, Code, Terminal, Smartphone, Database, FileText, Lock, Loader2 } from 'lucide-react';
 import FluidBackground from './components/FluidBackground';
 import GradientText from './components/GradientText';
 import ProjectCard from './components/ProjectCard';
 import AIChat from './components/AIChat';
+import CustomCursor from './components/CustomCursor';
+import AdminDashboard from './components/AdminDashboard';
 import { Project, Experience, Education, Certification, Award, Skill, Language } from './types';
-
-// Portfolio Data
-const PROJECTS: Project[] = [
-  { 
-    id: '1', 
-    title: 'Generus ERP', 
-    category: 'Fullstack Web Development', 
-    date: '2024 - 2026', 
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop',
-    description: 'A multi-tenant ERP system supporting multiple Islamic boarding schools under a centralized foundation. Built with Laravel (Livewire, Filament) and React.',
-    media: [
-      { type: 'image', url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop', title: 'Dashboard Overview', description: 'The main administrative dashboard for managing multiple tenants.' }
-    ]
-  },
-  { 
-    id: '2', 
-    title: 'SAYFINE', 
-    category: 'Mobile Development', 
-    date: '2021 - 2023', 
-    image: 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=1000&auto=format&fit=crop',
-    description: 'An Android application built with Java and Firebase that connects food sellers with customers through real-time chat, menu management, and ordering features.',
-    media: [
-      { type: 'image', url: 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=1000&auto=format&fit=crop', title: 'Order Management', description: 'Real-time order tracking and seller-customer communication.' }
-    ]
-  },
-  { 
-    id: '3', 
-    title: 'CABBLE', 
-    category: 'Mobile Development', 
-    date: '2021 - 2023', 
-    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop',
-    description: 'A Kotlin-based collaborative social platform designed to support open-source teamwork. Selected as Top 40 Finalist in a national startup competition.',
-    media: [
-      { type: 'image', url: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop', title: 'Collaboration Hub', description: 'Interface for team members to collaborate on open-source projects.' }
-    ]
-  },
-  { 
-    id: '4', 
-    title: 'LokaSee', 
-    category: 'Mobile Development', 
-    date: '2022', 
-    image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop',
-    description: 'A property listing application developed during the Bangkit Academy cohort. Implemented Clean Architecture, Kotlin, and Firebase.',
-    media: [
-      { type: 'image', url: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop', title: 'Property Search', description: 'Real-time property search and filtering interface.' }
-    ]
-  },
-  { 
-    id: '5', 
-    title: 'Wallet Codes', 
-    category: 'Backend Development', 
-    date: '2022', 
-    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop',
-    description: 'Developed RESTful APIs for the Wallet Codes backend using C# and ASP.NET Core. Contributed to the admin panel using React.js.',
-    media: [
-      { type: 'image', url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1000&auto=format&fit=crop', title: 'API Documentation', description: 'Structured API endpoints for secure transactions.' }
-    ]
-  }
-];
-
-const EXPERIENCES: Experience[] = [
-  {
-    id: 'e1',
-    company: 'Pondok Pesantren Walibarokah Kediri',
-    role: 'Full Stack Engineer',
-    period: 'Nov 2024 - Apr 2026',
-    location: 'Kediri City',
-    description: [
-      'Led digital transformation by architecting web and mobile information systems for academic, financial, and administrative operations.',
-      'Designed and implemented a multi-tenant ERP system ("Generus") using Laravel (Livewire, Filament) and React.',
-      'Built scalable modules covering student management, finance, academic tracking, and IoT-based attendance systems (RFID smartcard integration).',
-      'Developed RESTful APIs to support mobile apps, IoT devices, and external systems integration.'
-    ]
-  },
-  {
-    id: 'e2',
-    company: 'Pondok Pesantren Walibarokah Kediri',
-    role: 'ICT Teacher',
-    period: 'Jan 2025 - Mar 2026',
-    location: 'Kediri City',
-    description: [
-      'Taught ICT fundamentals to 10th-grade students, covering basic programming, computer systems, and digital literacy.',
-      'Simplified complex technical concepts into structured, easy-to-understand learning materials.',
-      'Mentored students in developing problem-solving and computational thinking skills.'
-    ]
-  },
-  {
-    id: 'e3',
-    company: 'Freelance | Self-Employed',
-    role: 'Freelance Mobile Developer',
-    period: 'Nov 2021 - Dec 2023',
-    location: 'Remote',
-    description: [
-      'Developed SAYFINE, an Android application built with Java and Firebase for food seller-customer connection.',
-      'Implemented features including authentication, chat system, order management, and BMI calculator.',
-      'Contributed to CABBLE, a Kotlin-based collaborative social platform.',
-      'Selected as Top 40 Finalist in a national startup competition for CABBLE.'
-    ]
-  },
-  {
-    id: 'e4',
-    company: 'Bangkit Academy',
-    role: 'Mobile Development Cohort',
-    period: 'Jan 2022 - Aug 2022',
-    location: 'Indonesia',
-    description: [
-      'Completed intensive Android development program covering Kotlin, Jetpack, and modern development best practices.',
-      'Collaborated in an Agile team to develop "LokaSee", a property listing application.',
-      'Implemented Clean Architecture principles and integrated Firebase and Google Cloud services.',
-      'Earned the globally recognized Associate Android Developer (AAD) certification.'
-    ]
-  },
-  {
-    id: 'e5',
-    company: 'Forest Interactive',
-    role: 'Software Engineer',
-    period: 'Feb 2022 - June 2022',
-    location: 'Malaysia',
-    description: [
-      'Developed RESTful APIs for the Wallet Codes backend using C# and ASP.NET Core.',
-      'Contributed to the development of the Wallet Codes admin panel using React.js.',
-      'Collaborated within a multinational development team gaining hands-on experience in enterprise workflows.'
-    ]
-  },
-  {
-    id: 'e6',
-    company: 'Tradeasia International',
-    role: 'IT Student Trainee',
-    period: 'Feb 2022 - May 2022',
-    location: 'Singapore',
-    description: [
-      'Analyzed and identified technical issues on the company website, delivering actionable SEO improvements.',
-      'Applied On-Page and Off-Page SEO strategies to increase organic traffic and search engine ranking.',
-      'Recognized with the "Best Individual Performance" award for outstanding analytical insights.'
-    ]
-  },
-  {
-    id: 'e7',
-    company: 'Universitas Sebelas Maret',
-    role: 'Assistant Lecturer of Digital System',
-    period: 'Sep 2020 - Jan 2021',
-    location: 'Surakarta',
-    description: [
-      'Prepared practical course materials and conducted engaging teaching activities for undergraduate students.',
-      'Evaluated student performance and provided comprehensive grade reports to head lecturers.'
-    ]
-  }
-];
-
-const EDUCATION: Education[] = [
-  {
-    id: 'edu1',
-    institution: 'Universitas Sebelas Maret',
-    degree: "Bachelor's Degree, Computer Science",
-    period: 'Aug 2019 - Dec 2023',
-    description: ['Informatics graduate with a strong passion for software engineering.']
-  }
-];
-
-const SKILLS: Skill[] = [
-  {
-    category: 'Top Skills',
-    items: ['Database Administration', 'Relational Databases', 'SQL']
-  },
-  {
-    category: 'Web Development',
-    items: ['Laravel', 'Filament PHP', 'Livewire', 'Inertia.js', 'React', 'Vue', 'TailwindCSS', 'ASP.NET Core (C#)', 'RESTful APIs']
-  },
-  {
-    category: 'Mobile Development',
-    items: ['Android Native', 'React Native', 'Kotlin', 'Java', 'Jetpack', 'Firebase']
-  },
-  {
-    category: 'Others',
-    items: ['SEO', 'Digital Product Optimization', 'Domain-Driven Design (DDD)', 'Object-Oriented Programming (OOP)']
-  }
-];
-
-const LANGUAGES: Language[] = [
-  { name: 'English', proficiency: 'Limited Working' },
-  { name: 'Indonesian', proficiency: 'Native or Bilingual' }
-];
-
-const CERTIFICATIONS: Certification[] = [
-  { id: 'c1', title: 'Associate Android Developer', issuer: 'Google' },
-  { id: 'c2', title: 'Microsoft Technology Associate: Database Administration Fundamentals (MTA)', issuer: 'Microsoft' }
-];
-
-const AWARDS: Award[] = [
-  { id: 'a1', title: 'Finalist - Lomba Inovasi Digital Mahasiswa (LIDM) 2020: Division I', date: '2020' },
-  { id: 'a2', title: 'Best Individual Performance - Tradeasia International', date: '2022' }
-];
+import { PortfolioContent, subscribeToPortfolioContent, initializePortfolioData } from './services/portfolioService';
 
 const App: React.FC = () => {
   const { scrollYProgress } = useScroll();
@@ -217,6 +28,68 @@ const App: React.FC = () => {
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedCertification, setSelectedCertification] = useState<Certification | null>(null);
+  const [selectedAward, setSelectedAward] = useState<Award | null>(null);
+  const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
+
+  // Scroll Spy State
+  const [activeSection, setActiveSection] = useState('hero');
+
+  // Admin State
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [password, setPassword] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Content State
+  const [content, setContent] = useState<PortfolioContent | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const init = async () => {
+      await initializePortfolioData();
+      const unsubscribe = subscribeToPortfolioContent((data) => {
+        setContent(data);
+        setIsLoading(false);
+      });
+      return () => unsubscribe();
+    };
+    init();
+  }, []);
+
+  useEffect(() => {
+    const sections = ['hero', 'experience', 'projects', 'education', 'skills', 'about'];
+    const observers = sections.map(section => {
+      const element = document.getElementById(section);
+      if (!element) return null;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setActiveSection(section);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      observer.observe(element);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, [isLoading]);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === 'annas3120') {
+      setIsLoggedIn(true);
+      setShowLogin(false);
+      setIsAdminOpen(true);
+    } else {
+      alert('Incorrect password');
+    }
+  };
   
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
@@ -233,38 +106,79 @@ const App: React.FC = () => {
     }
   };
 
+  if (isLoading || !content) {
+    return (
+      <div className="min-h-screen bg-bg-primary flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-12 h-12 text-action-blue animate-spin" />
+          <p className="font-heading font-bold uppercase tracking-widest text-ink-black/40">Loading Portfolio...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const { hero, projects, experiences, education, certifications, awards, skills, languages } = content;
+
   return (
     <div className="relative min-h-screen text-ink-black selection:bg-action-blue selection:text-white overflow-x-hidden font-sans">
+      <CustomCursor />
       <FluidBackground />
       
       {/* Navigation */}
       <div className="fixed top-6 left-0 right-0 z-40 flex justify-center px-6 pointer-events-none">
-        <nav className="nav-pill flex items-center justify-between w-full max-w-4xl pointer-events-auto">
-          <div className="font-heading text-xl md:text-2xl font-bold tracking-tight text-ink-black cursor-default">ANNAS.DEV</div>
+        <nav className="nav-pill flex items-center justify-between w-full max-w-4xl pointer-events-auto relative">
+          <div className="font-heading text-xl md:text-2xl font-bold tracking-tight text-ink-black cursor-default z-10">ANNAS.DEV</div>
           
           {/* Desktop Menu */}
-          <div className="hidden md:flex gap-8 text-sm font-bold tracking-wide uppercase">
-            {['Projects', 'Experience', 'Education', 'Skills', 'About'].map((item) => (
-              <button 
-                key={item} 
-                onClick={() => scrollToSection(item.toLowerCase())}
-                className="hover:text-action-blue hover:scale-110 transition-all text-ink-black cursor-pointer bg-transparent border-none"
-              >
-                {item}
-              </button>
-            ))}
+          <div className="hidden md:flex gap-4 lg:gap-8 text-sm font-bold tracking-wide uppercase relative z-10">
+            {['Experience', 'Projects', 'Education', 'Skills', 'About'].map((item) => {
+              const id = item.toLowerCase();
+              const isActive = activeSection === id;
+              return (
+                <motion.button 
+                  key={item} 
+                  onClick={() => scrollToSection(id)}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ y: 0 }}
+                  className={`relative px-4 py-2 transition-all cursor-pointer bg-transparent border-none group ${isActive ? 'text-white' : 'text-ink-black hover:text-action-blue'}`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNav"
+                      className="absolute inset-0 bg-[#9c3535] border-2 border-[#193e8e] rounded-full -z-10 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{item}</span>
+                </motion.button>
+              );
+            })}
+            <button 
+              onClick={() => isLoggedIn ? setIsAdminOpen(true) : setShowLogin(true)}
+              className="p-2 hover:bg-bg-primary rounded-full transition-colors pointer-events-auto"
+              title="Admin Panel"
+            >
+              <Lock className="w-4 h-4" />
+            </button>
+          </div>
+          
+          <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-ink-black/10 rounded-full overflow-hidden">
+            <motion.div 
+              className="h-full bg-action-blue"
+              style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
+            />
           </div>
           
           <button 
             onClick={() => scrollToSection('contact')}
-            className="btn-primary text-xs tracking-widest uppercase hidden md:block"
+            className="btn-primary text-xs tracking-widest uppercase hidden md:block relative z-10"
           >
             Contact Me
           </button>
 
           {/* Mobile Menu Toggle */}
           <button 
-            className="md:hidden text-ink-black relative w-10 h-10 flex items-center justify-center"
+            className="md:hidden text-ink-black relative w-10 h-10 flex items-center justify-center z-10"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
              {mobileMenuOpen ? <X /> : <Menu />}
@@ -281,7 +195,7 @@ const App: React.FC = () => {
             exit={{ opacity: 0, y: -20 }}
             className="fixed inset-0 z-30 bg-bg-primary/95 backdrop-blur-xl flex flex-col items-center justify-center gap-6 md:hidden"
           >
-            {['Projects', 'Experience', 'Education', 'Skills', 'About'].map((item) => (
+            {['Experience', 'Projects', 'Education', 'Skills', 'About'].map((item) => (
               <button
                 key={item}
                 onClick={() => scrollToSection(item.toLowerCase())}
@@ -342,7 +256,11 @@ const App: React.FC = () => {
           {/* Main Title */}
           <div className="relative w-full">
             <h1 className="text-[12vw] md:text-[10vw] leading-[0.8] font-heading font-bold tracking-tighter text-ink-black text-center mb-4 uppercase">
-              ANNAS <br/> ABDURRAHMAN
+              {hero.title.split(' ').map((word, i) => (
+                <React.Fragment key={i}>
+                  {word} {i === 0 && <br/>}
+                </React.Fragment>
+              ))}
             </h1>
             
             {/* Hand-drawn Arrow Decoration */}
@@ -361,7 +279,7 @@ const App: React.FC = () => {
             transition={{ delay: 0.8, duration: 1 }}
             className="text-lg md:text-2xl font-medium max-w-2xl mx-auto text-ink-black/70 leading-relaxed mt-12"
           >
-            Building scalable digital solutions with a focus on high-performance web and mobile systems.
+            {hero.subtitle}
           </motion.p>
         </motion.div>
 
@@ -386,53 +304,6 @@ const App: React.FC = () => {
           </motion.div>
         </div>
       </header>
-
-      {/* PROJECTS SECTION */}
-      <motion.section 
-        id="projects" 
-        className="relative z-10 py-12 md:py-20"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8 }}
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16">
-             <motion.div 
-               className="relative"
-               initial={{ x: -50, opacity: 0 }}
-               whileInView={{ x: 0, opacity: 1 }}
-               viewport={{ once: true }}
-               transition={{ delay: 0.2 }}
-             >
-               <h2 className="text-6xl md:text-8xl font-heading font-bold text-ink-black leading-[0.9]">
-                 <GradientText text="Featured" /> <br/> 
-                 <span className="text-action-blue">Projects</span>
-               </h2>
-               {/* Decorative Star */}
-               <div className="absolute -top-8 -right-8 text-pop-purple animate-spin-slow">
-                 <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
-                   <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10L12 0Z" />
-                 </svg>
-               </div>
-             </motion.div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12">
-            {PROJECTS.map((project, i) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <ProjectCard project={project} onClick={() => setSelectedProject(project)} />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
 
       {/* EXPERIENCE SECTION */}
       <motion.section 
@@ -506,15 +377,24 @@ const App: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              {EXPERIENCES.map((exp, i) => (
+              {experiences.map((exp, i) => (
                 <motion.div 
                   key={exp.id}
-                  className="bg-white p-8 rounded-[24px] border-2 border-ink-black text-ink-black relative group"
-                  whileHover={{ x: 10 }}
+                  className={`bg-white p-8 rounded-[24px] border-2 border-ink-black text-ink-black relative group transition-all ${exp.media ? 'cursor-pointer hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)]' : ''}`}
+                  whileHover={exp.media ? { x: 10, y: -10 } : { x: 10 }}
+                  onClick={() => exp.media && setSelectedExperience(exp)}
                 >
                   <div className="absolute -top-4 -left-4 bg-action-blue px-4 py-1 neo-brutal-border -rotate-2 sticker-effect">
                     <span className="font-bold text-xs uppercase">{exp.period}</span>
                   </div>
+                  
+                  {exp.media && (
+                    <div className="absolute -top-4 -right-4 bg-sticker-yellow px-3 py-1 neo-brutal-border rotate-3 sticker-effect flex items-center gap-1">
+                      <Zap className="w-3 h-3" />
+                      <span className="font-bold text-[10px] uppercase">View Media</span>
+                    </div>
+                  )}
+
                   <h3 className="text-2xl font-heading font-bold mb-1">{exp.role}</h3>
                   <p className="text-action-blue font-bold mb-4">{exp.company} ● {exp.location}</p>
                   <ul className="space-y-2">
@@ -527,6 +407,53 @@ const App: React.FC = () => {
                 </motion.div>
               ))}
             </motion.div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* PROJECTS SECTION */}
+      <motion.section 
+        id="projects" 
+        className="relative z-10 py-12 md:py-20"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16">
+             <motion.div 
+               className="relative"
+               initial={{ x: -50, opacity: 0 }}
+               whileInView={{ x: 0, opacity: 1 }}
+               viewport={{ once: true }}
+               transition={{ delay: 0.2 }}
+             >
+               <h2 className="text-6xl md:text-8xl font-heading font-bold text-ink-black leading-[0.9]">
+                 <GradientText text="Featured" /> <br/> 
+                 <span className="text-action-blue">Projects</span>
+               </h2>
+               {/* Decorative Star */}
+               <div className="absolute -top-8 -right-8 text-pop-purple animate-spin-slow">
+                 <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                   <path d="M12 0L14 10L24 12L14 14L12 24L10 14L0 12L10 10L12 0Z" />
+                 </svg>
+               </div>
+             </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12">
+            {projects.map((project, i) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <ProjectCard project={project} onClick={() => setSelectedProject(project)} />
+              </motion.div>
+            ))}
           </div>
         </div>
       </motion.section>
@@ -549,7 +476,7 @@ const App: React.FC = () => {
               </div>
             </div>
             <div className="w-full md:w-2/3 space-y-8">
-              {EDUCATION.map((edu) => (
+              {education.map((edu) => (
                 <div key={edu.id} className="relative pl-8 border-l-4 border-action-blue">
                   <div className="absolute -left-3 top-0 w-5 h-5 bg-action-blue rounded-full neo-brutal-border" />
                   <h3 className="text-2xl font-heading font-bold">{edu.institution}</h3>
@@ -588,7 +515,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {SKILLS.map((skillGroup, i) => (
+            {skills.map((skillGroup, i) => (
               <motion.div
                 key={i}
                 whileHover={{ y: -5 }}
@@ -620,11 +547,21 @@ const App: React.FC = () => {
                 <Zap className="text-sticker-yellow" /> Certifications
               </h3>
               <div className="space-y-4">
-                {CERTIFICATIONS.map((cert) => (
-                  <div key={cert.id} className="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                    <p className="text-white font-bold text-sm">{cert.title}</p>
-                    <p className="text-white/40 text-xs uppercase font-bold mt-1">{cert.issuer}</p>
-                  </div>
+                {certifications.map((cert) => (
+                  <motion.div 
+                    key={cert.id} 
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    onClick={() => setSelectedCertification(cert)}
+                    className="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm cursor-pointer group hover:bg-white/10 transition-all"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-white font-bold text-sm group-hover:text-sticker-yellow transition-colors">{cert.title}</p>
+                        <p className="text-white/40 text-xs uppercase font-bold mt-1">{cert.issuer}</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-white/20 group-hover:text-white transition-colors" />
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -635,11 +572,21 @@ const App: React.FC = () => {
                 <Music className="text-blush-pink" /> Honors & Awards
               </h3>
               <div className="space-y-4">
-                {AWARDS.map((award) => (
-                  <div key={award.id} className="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm">
-                    <p className="text-white font-bold text-sm">{award.title}</p>
-                    <p className="text-white/40 text-xs uppercase font-bold mt-1">{award.date}</p>
-                  </div>
+                {awards.map((award) => (
+                  <motion.div 
+                    key={award.id} 
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    onClick={() => setSelectedAward(award)}
+                    className="bg-white/5 border border-white/10 p-4 rounded-xl backdrop-blur-sm cursor-pointer group hover:bg-white/10 transition-all"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="text-white font-bold text-sm group-hover:text-blush-pink transition-colors">{award.title}</p>
+                        <p className="text-white/40 text-xs uppercase font-bold mt-1">{award.date}</p>
+                      </div>
+                      <ExternalLink className="w-4 h-4 text-white/20 group-hover:text-white transition-colors" />
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -650,7 +597,7 @@ const App: React.FC = () => {
                 <Globe className="text-action-blue" /> Languages
               </h3>
               <div className="flex flex-wrap gap-4">
-                {LANGUAGES.map((lang, i) => (
+                {languages.map((lang, i) => (
                   <div key={i} className="bg-action-blue p-4 neo-brutal-border rotate-2 sticker-effect">
                     <p className="text-ink-black font-bold text-sm uppercase">{lang.name}</p>
                     <p className="text-ink-black/60 text-[10px] font-bold uppercase">{lang.proficiency}</p>
@@ -669,7 +616,7 @@ const App: React.FC = () => {
             <h2 className="text-3xl font-heading font-bold text-ink-black uppercase">About Me</h2>
           </div>
           <p className="text-xl md:text-3xl font-heading font-medium text-ink-black leading-relaxed mb-12">
-            "I am an Informatics graduate with a strong passion for software engineering. My experience spans across full-stack web development (Frontend & Backend) and mobile systems (Native Android & React Native)."
+            "{hero.about}"
           </p>
           <div className="flex justify-center gap-8">
             <div className="flex flex-col items-center">
@@ -844,6 +791,323 @@ const App: React.FC = () => {
               </div>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Certification Detail Modal */}
+      <AnimatePresence>
+        {selectedCertification && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedCertification(null)}
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink-black/60 backdrop-blur-md cursor-auto"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-4xl bg-bg-primary card-container flex flex-col shadow-2xl max-h-[90vh]"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedCertification(null)}
+                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white neo-brutal-border text-ink-black hover:bg-action-blue transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <div className="p-8 md:p-12 overflow-y-auto">
+                <div className="inline-block bg-sticker-yellow px-4 py-1 neo-brutal-border -rotate-2 mb-6">
+                   <span className="font-bold text-xs uppercase">{selectedCertification.issuer}</span>
+                </div>
+                
+                <h3 className="text-3xl md:text-5xl font-heading font-bold leading-tight mb-8 text-ink-black">
+                  {selectedCertification.title}
+                </h3>
+
+                {selectedCertification.media && selectedCertification.media.length > 0 && (
+                  <div className="space-y-12">
+                    {selectedCertification.media.map((m, idx) => (
+                      <div key={idx} className="space-y-4">
+                        <div className="flex items-center gap-3 border-b-2 border-ink-black pb-2">
+                          {m.type === 'pdf' ? <FileText className="text-action-blue" /> : <Zap className="text-pop-purple w-5 h-5" />}
+                          <h4 className="font-heading font-bold text-xl">{m.title}</h4>
+                        </div>
+                        
+                        {m.description && (
+                          <p className="text-ink-black/70 font-medium italic">"{m.description}"</p>
+                        )}
+
+                        <div className="bg-white p-4 neo-brutal-border rounded-2xl overflow-hidden">
+                          {m.type === 'image' ? (
+                            <img 
+                              src={m.url} 
+                              alt={m.title} 
+                              className="w-full h-auto rounded-xl border border-ink-black/10" 
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <div className="aspect-[4/3] w-full">
+                              <iframe 
+                                src={`${m.url}#toolbar=0`} 
+                                className="w-full h-full rounded-xl border border-ink-black/10"
+                                title={m.title}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Award Detail Modal */}
+      <AnimatePresence>
+        {selectedAward && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedAward(null)}
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink-black/60 backdrop-blur-md cursor-auto"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-4xl bg-bg-primary card-container flex flex-col shadow-2xl max-h-[90vh]"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedAward(null)}
+                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white neo-brutal-border text-ink-black hover:bg-blush-pink transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <div className="p-8 md:p-12 overflow-y-auto">
+                <div className="inline-block bg-blush-pink px-4 py-1 neo-brutal-border rotate-2 mb-6">
+                   <span className="font-bold text-xs uppercase text-ink-black">{selectedAward.date}</span>
+                </div>
+                
+                <h3 className="text-3xl md:text-5xl font-heading font-bold leading-tight mb-8 text-ink-black">
+                  {selectedAward.title}
+                </h3>
+
+                {selectedAward.media && selectedAward.media.length > 0 && (
+                  <div className="space-y-12">
+                    {selectedAward.media.map((m, idx) => (
+                      <div key={idx} className="space-y-4">
+                        <div className="flex items-center gap-3 border-b-2 border-ink-black pb-2">
+                          {m.type === 'pdf' ? <FileText className="text-action-blue" /> : <Music className="text-blush-pink w-5 h-5" />}
+                          <h4 className="font-heading font-bold text-xl">{m.title}</h4>
+                        </div>
+                        
+                        {m.description && (
+                          <p className="text-ink-black/70 font-medium italic">"{m.description}"</p>
+                        )}
+
+                        <div className="bg-white p-4 neo-brutal-border rounded-2xl overflow-hidden">
+                          {m.type === 'image' ? (
+                            <img 
+                              src={m.url} 
+                              alt={m.title} 
+                              className="w-full h-auto rounded-xl border border-ink-black/10" 
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <div className="aspect-[4/3] w-full">
+                              <iframe 
+                                src={`${m.url}#toolbar=0`} 
+                                className="w-full h-full rounded-xl border border-ink-black/10"
+                                title={m.title}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Experience Detail Modal */}
+      <AnimatePresence>
+        {selectedExperience && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedExperience(null)}
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink-black/70 backdrop-blur-lg cursor-auto"
+          >
+            <motion.div
+              initial={{ scale: 0.9, x: 50 }}
+              animate={{ scale: 1, x: 0 }}
+              exit={{ scale: 0.9, x: 50 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-6xl bg-white neo-brutal-border flex flex-col md:flex-row shadow-2xl max-h-[90vh] overflow-hidden"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedExperience(null)}
+                className="absolute top-6 right-6 z-30 p-2 rounded-full bg-white neo-brutal-border text-ink-black hover:bg-action-blue transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              {/* Left Side: Media Gallery (Scrollable) */}
+              <div className="w-full md:w-3/5 p-6 md:p-10 bg-[#F0F0F0] overflow-y-auto border-b-2 md:border-b-0 md:border-r-2 border-ink-black">
+                <div className="space-y-12">
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="bg-action-blue p-3 neo-brutal-border -rotate-3">
+                      <Zap className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="font-heading font-bold text-2xl uppercase tracking-tighter">Experience Artifacts</h4>
+                  </div>
+
+                  {selectedExperience.media?.map((m, idx) => (
+                    <motion.div 
+                      key={idx}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.2 }}
+                      className="space-y-4"
+                    >
+                      <div className="bg-white p-6 neo-brutal-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <div className="flex items-center gap-2 mb-4 border-b border-ink-black/10 pb-2">
+                          {m.type === 'pdf' ? <FileText className="text-action-blue w-5 h-5" /> : <Smartphone className="text-pop-purple w-5 h-5" />}
+                          <span className="font-bold text-sm uppercase">{m.title}</span>
+                        </div>
+                        
+                        <div className="rounded-xl overflow-hidden border border-ink-black/5 bg-bg-primary">
+                          {m.type === 'image' ? (
+                            <img src={m.url} alt={m.title} className="w-full h-auto" referrerPolicy="no-referrer" />
+                          ) : (
+                            <div className="aspect-video w-full">
+                              <iframe src={`${m.url}#toolbar=0`} className="w-full h-full" title={m.title} />
+                            </div>
+                          )}
+                        </div>
+                        
+                        {m.description && (
+                          <p className="mt-4 text-sm font-medium text-ink-black/60 italic leading-relaxed">
+                            {m.description}
+                          </p>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Right Side: Details (Memo Style) */}
+              <div className="w-full md:w-2/5 p-8 md:p-12 bg-[#FDFCF8] overflow-y-auto flex flex-col">
+                <div className="mb-10">
+                  <div className="inline-block bg-sticker-yellow px-4 py-1 neo-brutal-border -rotate-2 mb-6">
+                    <span className="font-bold text-xs uppercase">{selectedExperience.period}</span>
+                  </div>
+                  <h3 className="text-4xl font-heading font-bold leading-none mb-4 text-ink-black">
+                    {selectedExperience.role}
+                  </h3>
+                  <p className="text-xl text-action-blue font-bold uppercase tracking-tight">
+                    {selectedExperience.company}
+                  </p>
+                  <p className="text-ink-black/40 font-bold text-sm mt-1">{selectedExperience.location}</p>
+                </div>
+
+                <div className="h-1 w-full bg-ink-black/10 mb-10" />
+
+                <div className="space-y-6 flex-1">
+                  <h5 className="font-bold text-xs uppercase tracking-widest text-ink-black/40">Key Contributions</h5>
+                  <ul className="space-y-4">
+                    {selectedExperience.description.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-3 text-base font-medium text-ink-black/80">
+                        <span className="text-pop-purple mt-1">★</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-12 pt-8 border-t border-ink-black/10">
+                  <div className="bg-bg-primary p-4 neo-brutal-border rotate-1">
+                    <p className="text-[10px] font-bold uppercase tracking-tighter text-ink-black/40 mb-1">Status</p>
+                    <p className="text-xs font-bold text-action-blue uppercase">Verified Experience Record</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Admin Login Modal */}
+      <AnimatePresence>
+        {showLogin && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-ink-black/80 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              className="bg-white p-8 neo-brutal-border w-full max-w-md relative"
+            >
+              <button 
+                onClick={() => setShowLogin(false)}
+                className="absolute top-4 right-4"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <div className="flex items-center gap-4 mb-8">
+                <div className="bg-sticker-yellow p-2 neo-brutal-border">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <h2 className="text-2xl font-heading font-bold uppercase">Admin Access</h2>
+              </div>
+              <form onSubmit={handleLogin} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase text-ink-black/40">Secret Password</label>
+                  <input 
+                    type="password" 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full p-3 neo-brutal-border bg-bg-primary font-bold"
+                    placeholder="Enter password..."
+                    autoFocus
+                  />
+                </div>
+                <button 
+                  type="submit"
+                  className="w-full bg-action-blue py-3 neo-brutal-border font-bold uppercase tracking-widest hover:translate-x-1 hover:-translate-y-1 transition-transform"
+                >
+                  Enter Dashboard
+                </button>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Admin Dashboard */}
+      <AnimatePresence>
+        {isAdminOpen && isLoggedIn && (
+          <AdminDashboard 
+            content={content} 
+            onClose={() => setIsAdminOpen(false)} 
+          />
         )}
       </AnimatePresence>
     </div>
