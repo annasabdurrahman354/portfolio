@@ -20,11 +20,14 @@
   }
   
   @media (hover: hover) and (pointer: fine) {
-    body {
+    body:not(.admin-mode) {
       cursor: none;
     }
     
-    a, button, [role="button"], .cursor-pointer {
+    body:not(.admin-mode) a, 
+    body:not(.admin-mode) button, 
+    body:not(.admin-mode) [role="button"], 
+    body:not(.admin-mode) .cursor-pointer {
       cursor: none;
     }
   }

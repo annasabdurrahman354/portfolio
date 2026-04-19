@@ -5,7 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { sendMessageToGemini } from '../services/geminiService';
 import { ChatMessage } from '../types';
 
-const AIChat: React.FC = () => {
+interface AIChatProps {
+  onAdminCommand?: () => void;
+}
+
+const AIChat: React.FC<AIChatProps> = ({ onAdminCommand }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'model', text: "Hi! I'm Annas's digital assistant. Ask me anything about his experience, skills, or projects! ★" }
@@ -33,9 +37,21 @@ const AIChat: React.FC = () => {
 
     const userMessage: ChatMessage = { role: 'user', text: input };
     setMessages(prev => [...prev, userMessage]);
+    
+    const currentInput = input.trim();
     setInput('');
-    setIsLoading(true);
 
+    if (currentInput === 'open admin') {
+      setIsLoading(true);
+      setTimeout(() => {
+        setMessages(prev => [...prev, { role: 'model', text: 'Opening admin access modal... 🔒' }]);
+        setIsLoading(false);
+        onAdminCommand?.();
+      }, 1000);
+      return;
+    }
+
+    setIsLoading(true);
     setTimeout(scrollToBottom, 100);
 
     const systemPrompt = `You are the digital assistant for Annas Abdurrahman, a Fullstack Software Developer based in Yogyakarta, Indonesia. 
@@ -69,7 +85,7 @@ const AIChat: React.FC = () => {
     Keep your answers professional, helpful, and slightly playful to match the "Modern Retro" aesthetic of the portfolio.
     If asked about contact info, mention his email: annasabdurrahman354@gmail.com or his LinkedIn.`;
 
-    const responseText = await sendMessageToGemini(`${systemPrompt}\n\nUser: ${input}`);
+    const responseText = await sendMessageToGemini(`${systemPrompt}\n\nUser: ${currentInput}`);
     
     setMessages(prev => [...prev, { role: 'model', text: responseText }]);
     setIsLoading(false);
@@ -164,7 +180,7 @@ const AIChat: React.FC = () => {
         whileHover={{ scale: 1.05, rotate: 5 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-action-blue flex items-center justify-center sticker-effect neo-brutal-border z-50 group"
+        className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-400 flex items-center justify-center sticker-effect neo-brutal-border z-50 group"
       >
         {isOpen ? (
           <X className="w-6 h-6 text-ink-black" />

@@ -30,24 +30,38 @@ const PortfolioScreen: React.FC<PortfolioScreenProps> = ({ content, onAdminClick
 
   useEffect(() => {
     const sections = ['hero', 'experience', 'projects', 'education', 'skills', 'about'];
-    const observers = sections.map(section => {
-      const element = document.getElementById(section);
-      if (!element) return null;
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setActiveSection(section);
-          }
-        });
-      }, { threshold: 0.5 });
+    const getActiveSection = () => {
+      const viewportHeight = window.innerHeight;
+      let maxOverlap = -1;
+      let active = 'hero';
 
-      observer.observe(element);
-      return observer;
-    });
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        const rect = el.getBoundingClientRect();
+        // Calculate how much of the element overlaps with the viewport
+        const visibleTop = Math.max(rect.top, 0);
+        const visibleBottom = Math.min(rect.bottom, viewportHeight);
+        const overlap = Math.max(0, visibleBottom - visibleTop);
+
+        if (overlap > maxOverlap) {
+          maxOverlap = overlap;
+          active = id;
+        }
+      });
+
+      setActiveSection(active);
+    };
+
+    window.addEventListener('scroll', getActiveSection, { passive: true });
+    window.addEventListener('resize', getActiveSection, { passive: true });
+    getActiveSection();
 
     return () => {
-      observers.forEach(observer => observer?.disconnect());
+      window.removeEventListener('scroll', getActiveSection);
+      window.removeEventListener('resize', getActiveSection);
     };
   }, []);
 
@@ -160,7 +174,7 @@ const PortfolioScreen: React.FC<PortfolioScreenProps> = ({ content, onAdminClick
       <AboutSection aboutText={hero.about} />
       <ContactSection />
       <FooterSection />
-      <AIChat />
+      <AIChat onAdminCommand={onAdminClick} />
 
     </div>
   );

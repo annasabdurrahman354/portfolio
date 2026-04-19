@@ -45,7 +45,7 @@ const CustomCursor: React.FC = () => {
     };
   }, [mouseX, mouseY, isVisible]);
 
-  if (!isVisible) return null;
+  if (!isVisible || document.body.classList.contains('admin-mode')) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999] hidden md:block">

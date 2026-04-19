@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, Lock, Loader2 } from 'lucide-react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import AdminScreen from './screen/AdminScreen';
 import PortfolioScreen from './screen/PortfolioScreen';
 import { PortfolioContent, subscribeToPortfolioContent, initializePortfolioData } from './services/portfolioService';
@@ -73,6 +73,17 @@ const AppContent: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isAdminMode = location.pathname.startsWith('/admin') || showLogin;
+
+  useEffect(() => {
+    if (isAdminMode) {
+      document.body.classList.add('admin-mode');
+    } else {
+      document.body.classList.remove('admin-mode');
+    }
+  }, [isAdminMode]);
 
   useEffect(() => {
     const init = async () => {
