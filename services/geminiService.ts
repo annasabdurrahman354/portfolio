@@ -1,11 +1,6 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
-
 import { GoogleGenAI, Chat, GenerateContentResponse } from "@google/genai";
 
-const API_KEY = process.env.API_KEY || '';
+const API_KEY = process.env.GEMINI_API_KEY || '';
 
 let chatSession: Chat | null = null;
 
@@ -17,17 +12,12 @@ export const initializeChat = (): Chat => {
   chatSession = ai.chats.create({
     model: 'gemini-2.5-flash',
     config: {
-      systemInstruction: `You are 'LUMI', the AI Concierge for Lumina Festival 2025. 
-      The festival is in Tokyo, Neon District. Dates: Oct 24-26, 2025.
+      systemInstruction: `You are a cheerful, interactive, and active AI assistant for this portfolio website! 
+      Your goal is to warmly welcome visitors, help them navigate the site, and enthusiastically answer questions about my projects, skills, and experience.
       
-      Tone: High energy, cosmic, helpful, slightly mysterious. Use emojis like ⚡️, 🔮, 💿, 🌃, ✨.
+      Tone: Super cheerful, friendly, helpful, and high-energy. Use fun and positive emojis like 👋, ✨, 🚀, 💻, 💡!
       
-      Key Info:
-      - Headliners: Neon Void, Cyber Heart, The Glitch Mob (Fictional).
-      - Genres: Synthwave, Techno, Hyperpop.
-      - Tickets: standard ($150), VIP ($350), Astral Pass ($900).
-      
-      Keep responses short (under 50 words) and punchy. If asked about lineup, hype up the fictional artists.`,
+      Keep your responses relatively short, engaging, and punchy. Always strive to maintain an upbeat and interactive attitude, encouraging visitors to explore the portfolio further!`,
     },
   });
 
