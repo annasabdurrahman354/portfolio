@@ -19,6 +19,23 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      build: {
+        chunkSizeWarningLimit: 600,
+        rollupOptions: {
+          output: {
+            manualChunks(id) {
+              if (id.includes('node_modules')) {
+                if (id.includes('framer-motion')) return 'vendor-framer-motion';
+                if (id.includes('firebase')) return 'vendor-firebase';
+                if (id.includes('@google/genai')) return 'vendor-genai';
+                if (id.includes('react-markdown') || id.includes('remark')) return 'vendor-markdown';
+                if (id.includes('lucide-react')) return 'vendor-lucide';
+                return 'vendor-core';
+              }
+            }
+          }
+        }
       }
     };
 });
