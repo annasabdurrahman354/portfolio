@@ -1,5 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sendMessageToGemini } from '../services/geminiService';
@@ -125,13 +127,21 @@ const AIChat: React.FC<AIChatProps> = ({ onAdminCommand }) => {
                   className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] p-4 rounded-2xl text-sm font-medium neo-brutal-border ${
+                    className={`max-w-[85%] p-4 rounded-2xl text-sm font-medium neo-brutal-border overflow-hidden ${
                       msg.role === 'user'
                         ? 'bg-pop-purple text-ink-black rounded-tr-none rotate-1'
                         : 'bg-white text-ink-black rounded-tl-none -rotate-1'
                     }`}
                   >
-                    {msg.text}
+                    {msg.role === 'user' ? (
+                      msg.text
+                    ) : (
+                      <div className="prose prose-sm max-w-none text-ink-black prose-p:text-ink-black prose-headings:text-ink-black prose-strong:text-ink-black prose-a:text-action-blue marker:text-ink-black leading-snug">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {msg.text}
+                        </ReactMarkdown>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
