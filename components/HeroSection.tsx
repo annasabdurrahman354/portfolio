@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 
 interface HeroSectionProps {
   hero: {
@@ -10,6 +10,9 @@ interface HeroSectionProps {
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ hero }) => {
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const isMarqueeInView = useInView(marqueeRef);
+
   const { scrollYProgress } = useScroll();
   const ySlow = useTransform(scrollYProgress, [0, 1], [0, -100]);
   const yFast = useTransform(scrollYProgress, [0, 1], [0, -400]);
@@ -88,11 +91,19 @@ const HeroSection: React.FC<HeroSectionProps> = ({ hero }) => {
       </motion.div>
 
       {/* MARQUEE */}
-      <div className="w-full py-4 bg-ink-black text-white z-20 overflow-hidden rotate-1 scale-105 border-y-2 border-white mt-16 mb-4">
-        <motion.div
+      <div ref={marqueeRef} className="w-full py-4 bg-ink-black text-white z-20 overflow-hidden rotate-1 scale-105 border-y-2 border-white mt-16 mb-4">
+        <style>{`
+          @keyframes scrollMarquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
+        <div
           className="flex w-fit"
-          animate={{ x: "-50%" }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          style={{
+            animation: 'scrollMarquee 40s linear infinite',
+            animationPlayState: isMarqueeInView ? 'running' : 'paused'
+          }}
         >
           {[0, 1].map((key) => (
             <div key={key} className="flex whitespace-nowrap shrink-0">
@@ -105,7 +116,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ hero }) => {
               ))}
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </header>
   );
