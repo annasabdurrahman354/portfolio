@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Loader2, Save, Smartphone, X } from 'lucide-react';
+import { Loader2, Menu, Save, Smartphone, X } from 'lucide-react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { PortfolioContent, updatePortfolioContent, uploadMedia } from '../services/portfolioService';
 import AdminSidebar from '../components/AdminSidebar';
@@ -18,6 +18,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ content, onClose }) => {
   const [editedContent, setEditedContent] = useState<PortfolioContent>(content);
   const [isSaving, setIsSaving] = useState(false);
   const [uploading, setUploading] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -52,12 +53,20 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ content, onClose }) => {
   return (
     <div className="fixed inset-0 z-[100] bg-bg-primary flex flex-col overflow-hidden font-sans">
       {/* Header */}
-      <div className="bg-white border-b-4 border-ink-black p-6 flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <div className="bg-sticker-yellow p-2 neo-brutal-border rotate-3">
+      <div className="bg-white border-b-4 border-ink-black px-4 py-4 md:px-6 md:py-6 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          {/* Burger button — mobile only */}
+          <button
+            className="md:hidden p-2 hover:bg-ink-black/5 rounded transition-colors"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Open menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+          <div className="bg-sticker-yellow p-2 neo-brutal-border rotate-3 hidden sm:block">
             <Smartphone className="w-6 h-6 text-ink-black" />
           </div>
-          <h1 className="text-2xl font-heading font-bold uppercase tracking-tighter">Content Manager</h1>
+          <h1 className="text-lg sm:text-2xl font-heading font-bold uppercase tracking-tighter">Content Manager</h1>
           {uploading && (
             <span className="text-xs font-bold text-action-blue flex items-center gap-2">
               <Loader2 className="w-3 h-3 animate-spin" /> Uploading {uploading}...
@@ -83,8 +92,8 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ content, onClose }) => {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        <AdminSidebar />
-        <div className="flex-1 overflow-y-auto p-8 md:p-12 bg-bg-primary">
+        <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 md:p-12 bg-bg-primary">
           <div className="max-w-4xl mx-auto">
             <Routes>
               <Route path="/" element={<Outlet context={outletContext} />}>
