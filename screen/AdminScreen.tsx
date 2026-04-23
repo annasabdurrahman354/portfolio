@@ -5,7 +5,10 @@ import { PortfolioContent, updatePortfolioContent, uploadMedia } from '../servic
 import AdminSidebar from '../components/AdminSidebar';
 import AdminHeroPage from './admin/AdminHeroPage';
 import AdminProjectsPage from './admin/AdminProjectsPage';
-import AdminListPage from './admin/AdminListPage';
+import AdminExperiencePage from './admin/AdminExperiencePage';
+import AdminEducationPage from './admin/AdminEducationPage';
+import AdminCertificationsPage from './admin/AdminCertificationsPage';
+import AdminAwardsPage from './admin/AdminAwardsPage';
 import AdminSkillsPage from './admin/AdminSkillsPage';
 import AdminLanguagesPage from './admin/AdminLanguagesPage';
 
@@ -100,56 +103,10 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ content, onClose }) => {
                 <Route index element={<Navigate to="hero" replace />} />
                 <Route path="hero" element={<AdminHeroPage />} />
                 <Route path="projects" element={<AdminProjectsPage />} />
-                <Route path="experience" element={
-                  <AdminListPage 
-                    sectionKey="experiences"
-                    sectionName="Experience"
-                    newItemTemplate={{ id: Date.now().toString(), company: '', role: '', period: '', location: '', description: [], media: [] }}
-                    fields={[
-                      { key: 'company', label: 'Company', type: 'text' },
-                      { key: 'role', label: 'Role', type: 'text' },
-                      { key: 'period', label: 'Period', type: 'text' },
-                      { key: 'location', label: 'Location', type: 'text' },
-                      { key: 'description', label: 'Key Contributions', type: 'list' },
-                    ]}
-                  />
-                } />
-                <Route path="education" element={
-                  <AdminListPage 
-                    sectionKey="education"
-                    sectionName="Education"
-                    newItemTemplate={{ id: Date.now().toString(), institution: '', degree: '', period: '', description: [] }}
-                    fields={[
-                      { key: 'institution', label: 'Institution', type: 'text' },
-                      { key: 'degree', label: 'Degree', type: 'text' },
-                      { key: 'period', label: 'Period', type: 'text' },
-                      { key: 'description', label: 'Description', type: 'list' },
-                    ]}
-                  />
-                } />
-                <Route path="certifications" element={
-                  <AdminListPage 
-                    sectionKey="certifications"
-                    sectionName="Certification"
-                    newItemTemplate={{ id: Date.now().toString(), title: '', issuer: '', date: '', media: [] }}
-                    fields={[
-                      { key: 'title', label: 'Title', type: 'text' },
-                      { key: 'issuer', label: 'Issuer', type: 'text' },
-                      { key: 'date', label: 'Date', type: 'text' },
-                    ]}
-                  />
-                } />
-                <Route path="awards" element={
-                  <AdminListPage 
-                    sectionKey="awards"
-                    sectionName="Award"
-                    newItemTemplate={{ id: Date.now().toString(), title: '', date: '', media: [] }}
-                    fields={[
-                      { key: 'title', label: 'Title', type: 'text' },
-                      { key: 'date', label: 'Date', type: 'text' },
-                    ]}
-                  />
-                } />
+                <Route path="experience" element={<AdminExperiencePage />} />
+                <Route path="education" element={<AdminEducationPage />} />
+                <Route path="certifications" element={<AdminCertificationsPage />} />
+                <Route path="awards" element={<AdminAwardsPage />} />
                 <Route path="skills" element={<AdminSkillsPage />} />
                 <Route path="languages" element={<AdminLanguagesPage />} />
               </Route>

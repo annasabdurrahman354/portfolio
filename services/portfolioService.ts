@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../firebase';
+import { db } from '../firebase';
+import { supabase } from './supabase';
 import { Project, Experience, Education, Certification, Award, Skill, Language } from '../types';
 import * as initialData from '../constants';
 
@@ -59,12 +59,23 @@ export const updatePortfolioContent = async (content: PortfolioContent) => {
 
 export const uploadMedia = async (file: File, path: string): Promise<string> => {
   try {
-    const storageRef = ref(storage, path);
-    await uploadBytes(storageRef, file);
-    const downloadURL = await getDownloadURL(storageRef);
-    return downloadURL;
+    // We assume a bucket named 'portfolio' exists.
+    // Path should include the filename.
+    const { data, error } = await supabase.storage
+      .from('portfolio')
+      .upload(path, file, {
+        upsert: true
+      });
+
+    if (error) throw error;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('portfolio')
+      .getPublicUrl(data.path);
+
+    return publicUrl;
   } catch (error) {
-    console.error('Error uploading media:', error);
+    console.error('Error uploading media to Supabase:', error);
     throw error;
   }
 };

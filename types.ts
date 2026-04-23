@@ -6,8 +6,10 @@ export interface Project {
   image: string;
   date: string;
   description: string;
+  liveUrl?: string;
+  codeUrl?: string;
   media?: {
-    type: 'image' | 'video';
+    type: 'image' | 'video' | 'pdf';
     url: string;
     title: string;
     description?: string;

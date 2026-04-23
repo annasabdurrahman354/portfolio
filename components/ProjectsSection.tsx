@@ -126,24 +126,52 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects }) => {
 
                   {selectedProject.media && selectedProject.media.length > 0 && (
                     <div className="space-y-6 mt-8">
-                      <h4 className="font-heading font-bold text-xl border-b-2 border-ink-black pb-2">Project Media</h4>
-                      {selectedProject.media.map((m, idx) => (
-                        <div key={idx} className="bg-white p-4 neo-brutal-border rounded-xl">
-                          <p className="font-bold text-sm mb-1">{m.title}</p>
-                          {m.description && <p className="text-xs text-ink-black/60 mb-2">{m.description}</p>}
-                          <img src={m.url} alt={m.title} className="w-full h-32 object-cover rounded-lg border border-ink-black/10" />
-                        </div>
-                      ))}
+                      <h4 className="font-heading font-bold text-xl border-b-2 border-ink-black pb-2 uppercase tracking-tighter">Project Media</h4>
+                      <div className="grid grid-cols-1 gap-6">
+                        {selectedProject.media.map((m, idx) => (
+                          <div key={idx} className="bg-white p-4 neo-brutal-border rounded-xl space-y-3">
+                            <div>
+                              <p className="font-bold text-sm uppercase tracking-tight">{m.title}</p>
+                              {m.description && <p className="text-xs text-ink-black/60">{m.description}</p>}
+                            </div>
+                            {m.type === 'image' && (
+                              <img src={m.url} alt={m.title} className="w-full h-auto object-contain rounded-lg border border-ink-black/10" />
+                            )}
+                            {m.type === 'video' && (
+                              <video src={m.url} controls className="w-full h-auto rounded-lg border border-ink-black/10" />
+                            )}
+                            {m.type === 'pdf' && (
+                              <a href={m.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-3 bg-bg-primary neo-brutal-border text-xs font-bold uppercase hover:bg-action-blue/10 transition-colors">
+                                View PDF Document
+                              </a>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
 
-                  <div className="mt-8 flex gap-4">
-                    <button className="btn-primary flex items-center gap-2">
-                      <ExternalLink className="w-4 h-4" /> Live Demo
-                    </button>
-                    <button className="px-6 py-3 rounded-full border-2 border-ink-black font-bold hover:bg-ink-black hover:text-white transition-all">
-                      View Code
-                    </button>
+                  <div className="mt-12 flex flex-wrap gap-4">
+                    {selectedProject.liveUrl && (
+                      <a 
+                        href={selectedProject.liveUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="btn-primary flex items-center gap-2 text-sm"
+                      >
+                        <ExternalLink className="w-4 h-4" /> Live Demo
+                      </a>
+                    )}
+                    {selectedProject.codeUrl && (
+                      <a 
+                        href={selectedProject.codeUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="px-6 py-3 rounded-full border-2 border-ink-black font-bold hover:bg-ink-black hover:text-white transition-all text-sm"
+                      >
+                        View Code
+                      </a>
+                    )}
                   </div>
                 </motion.div>
               </div>
