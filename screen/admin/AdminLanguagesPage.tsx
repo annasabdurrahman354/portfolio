@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { PortfolioContent } from '../../services/portfolioService';
 
@@ -21,7 +21,38 @@ const AdminLanguagesPage: React.FC = () => {
         <Plus className="w-4 h-4" /> Add Language
       </button>
       {editedContent.languages.map((lang, idx) => (
-        <div key={idx} className="p-6 bg-white neo-brutal-border grid grid-cols-2 gap-4">
+        <div key={idx} className="p-6 bg-white neo-brutal-border grid grid-cols-2 gap-4 relative group pr-32">
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button 
+              onClick={() => {
+                if (idx > 0) {
+                  const newLangs = [...editedContent.languages];
+                  [newLangs[idx - 1], newLangs[idx]] = [newLangs[idx], newLangs[idx - 1]];
+                  setEditedContent({ ...editedContent, languages: newLangs });
+                }
+              }}
+              disabled={idx === 0}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowUp className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                if (idx < editedContent.languages.length - 1) {
+                  const newLangs = [...editedContent.languages];
+                  [newLangs[idx], newLangs[idx + 1]] = [newLangs[idx + 1], newLangs[idx]];
+                  setEditedContent({ ...editedContent, languages: newLangs });
+                }
+              }}
+              disabled={idx === editedContent.languages.length - 1}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowDown className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                const newLangs = editedContent.languages.filter((_, i) => i !== idx);
+                setEditedContent({ ...editedContent, languages: newLangs });
+              }}
+              className="p-1 text-red-500 hover:bg-red-50 bg-white neo-brutal-border"
+            ><Trash2 className="w-4 h-4" /></button>
+          </div>
           <input 
             type="text" 
             value={lang.name}

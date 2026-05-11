@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Trash2, Upload, ExternalLink, Github } from 'lucide-react';
+import { Plus, Trash2, Upload, ExternalLink, Github, ArrowUp, ArrowDown } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { PortfolioContent } from '../../services/portfolioService';
 import { Project } from '../../types';
@@ -42,17 +42,39 @@ const AdminProjectsPage: React.FC = () => {
       </button>
       
       {editedContent.projects.map((project, idx) => (
-        <div key={project.id} className="p-6 bg-white neo-brutal-border space-y-4 relative">
-          <button 
-            onClick={() => {
-              const newProjects = [...editedContent.projects];
-              newProjects.splice(idx, 1);
-              setEditedContent({ ...editedContent, projects: newProjects });
-            }}
-            className="absolute top-4 right-4 text-red-500 hover:bg-red-50 p-1"
-          >
-            <Trash2 className="w-5 h-5" />
-          </button>
+        <div key={project.id} className="p-6 bg-white neo-brutal-border space-y-4 relative group md:pr-32">
+          <div className="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button 
+              onClick={() => {
+                if (idx > 0) {
+                  const newProjects = [...editedContent.projects];
+                  [newProjects[idx - 1], newProjects[idx]] = [newProjects[idx], newProjects[idx - 1]];
+                  setEditedContent({ ...editedContent, projects: newProjects });
+                }
+              }}
+              disabled={idx === 0}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowUp className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                if (idx < editedContent.projects.length - 1) {
+                  const newProjects = [...editedContent.projects];
+                  [newProjects[idx], newProjects[idx + 1]] = [newProjects[idx + 1], newProjects[idx]];
+                  setEditedContent({ ...editedContent, projects: newProjects });
+                }
+              }}
+              disabled={idx === editedContent.projects.length - 1}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowDown className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                const newProjects = [...editedContent.projects];
+                newProjects.splice(idx, 1);
+                setEditedContent({ ...editedContent, projects: newProjects });
+              }}
+              className="p-1 text-red-500 hover:bg-red-50 bg-white neo-brutal-border"
+            ><Trash2 className="w-4 h-4" /></button>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="space-y-2 md:col-span-2">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { PortfolioContent } from '../../services/portfolioService';
 import { Education } from '../../types';
@@ -37,17 +37,39 @@ const AdminEducationPage: React.FC = () => {
       </button>
       
       {editedContent.education.map((edu, idx) => (
-        <div key={edu.id} className="p-6 bg-white neo-brutal-border space-y-4 relative">
-          <button 
-            onClick={() => {
-              const newEducation = [...editedContent.education];
-              newEducation.splice(idx, 1);
-              setEditedContent({ ...editedContent, education: newEducation });
-            }}
-            className="absolute top-4 right-4 text-red-500 hover:bg-red-50 p-1"
-          >
-            <Trash2 className="w-5 h-5" />
-          </button>
+        <div key={edu.id} className="p-6 bg-white neo-brutal-border space-y-4 relative group md:pr-32">
+          <div className="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button 
+              onClick={() => {
+                if (idx > 0) {
+                  const newEducation = [...editedContent.education];
+                  [newEducation[idx - 1], newEducation[idx]] = [newEducation[idx], newEducation[idx - 1]];
+                  setEditedContent({ ...editedContent, education: newEducation });
+                }
+              }}
+              disabled={idx === 0}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowUp className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                if (idx < editedContent.education.length - 1) {
+                  const newEducation = [...editedContent.education];
+                  [newEducation[idx], newEducation[idx + 1]] = [newEducation[idx + 1], newEducation[idx]];
+                  setEditedContent({ ...editedContent, education: newEducation });
+                }
+              }}
+              disabled={idx === editedContent.education.length - 1}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowDown className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                const newEducation = [...editedContent.education];
+                newEducation.splice(idx, 1);
+                setEditedContent({ ...editedContent, education: newEducation });
+              }}
+              className="p-1 text-red-500 hover:bg-red-50 bg-white neo-brutal-border"
+            ><Trash2 className="w-4 h-4" /></button>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">

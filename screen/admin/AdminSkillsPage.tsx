@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, X } from 'lucide-react';
+import { Plus, X, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { PortfolioContent } from '../../services/portfolioService';
 
@@ -21,7 +21,38 @@ const AdminSkillsPage: React.FC = () => {
         <Plus className="w-4 h-4" /> Add Skill Category
       </button>
       {editedContent.skills.map((skill, idx) => (
-        <div key={idx} className="p-6 bg-white neo-brutal-border space-y-4">
+        <div key={idx} className="p-6 bg-white neo-brutal-border space-y-4 relative group pr-32">
+          <div className="absolute right-4 top-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button 
+              onClick={() => {
+                if (idx > 0) {
+                  const newSkills = [...editedContent.skills];
+                  [newSkills[idx - 1], newSkills[idx]] = [newSkills[idx], newSkills[idx - 1]];
+                  setEditedContent({ ...editedContent, skills: newSkills });
+                }
+              }}
+              disabled={idx === 0}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowUp className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                if (idx < editedContent.skills.length - 1) {
+                  const newSkills = [...editedContent.skills];
+                  [newSkills[idx], newSkills[idx + 1]] = [newSkills[idx + 1], newSkills[idx]];
+                  setEditedContent({ ...editedContent, skills: newSkills });
+                }
+              }}
+              disabled={idx === editedContent.skills.length - 1}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowDown className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                const newSkills = editedContent.skills.filter((_, i) => i !== idx);
+                setEditedContent({ ...editedContent, skills: newSkills });
+              }}
+              className="p-1 text-red-500 hover:bg-red-50 bg-white neo-brutal-border"
+            ><Trash2 className="w-4 h-4" /></button>
+          </div>
           <input 
             type="text" 
             value={skill.category}

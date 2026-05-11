@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, Trash2, Upload } from 'lucide-react';
+import { Plus, Trash2, Upload, ArrowUp, ArrowDown } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { PortfolioContent } from '../../services/portfolioService';
 import { Award } from '../../types';
@@ -37,17 +37,39 @@ const AdminAwardsPage: React.FC = () => {
       </button>
       
       {editedContent.awards.map((award, idx) => (
-        <div key={award.id} className="p-6 bg-white neo-brutal-border space-y-4 relative">
-          <button 
-            onClick={() => {
-              const newAwards = [...editedContent.awards];
-              newAwards.splice(idx, 1);
-              setEditedContent({ ...editedContent, awards: newAwards });
-            }}
-            className="absolute top-4 right-4 text-red-500 hover:bg-red-50 p-1"
-          >
-            <Trash2 className="w-5 h-5" />
-          </button>
+        <div key={award.id} className="p-6 bg-white neo-brutal-border space-y-4 relative group md:pr-32">
+          <div className="absolute right-4 top-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button 
+              onClick={() => {
+                if (idx > 0) {
+                  const newAwards = [...editedContent.awards];
+                  [newAwards[idx - 1], newAwards[idx]] = [newAwards[idx], newAwards[idx - 1]];
+                  setEditedContent({ ...editedContent, awards: newAwards });
+                }
+              }}
+              disabled={idx === 0}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowUp className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                if (idx < editedContent.awards.length - 1) {
+                  const newAwards = [...editedContent.awards];
+                  [newAwards[idx], newAwards[idx + 1]] = [newAwards[idx + 1], newAwards[idx]];
+                  setEditedContent({ ...editedContent, awards: newAwards });
+                }
+              }}
+              disabled={idx === editedContent.awards.length - 1}
+              className="p-1 hover:bg-gray-100 disabled:opacity-30 bg-white neo-brutal-border"
+            ><ArrowDown className="w-4 h-4" /></button>
+            <button 
+              onClick={() => {
+                const newAwards = [...editedContent.awards];
+                newAwards.splice(idx, 1);
+                setEditedContent({ ...editedContent, awards: newAwards });
+              }}
+              className="p-1 text-red-500 hover:bg-red-50 bg-white neo-brutal-border"
+            ><Trash2 className="w-4 h-4" /></button>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
