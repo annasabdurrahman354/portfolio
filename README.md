@@ -1,20 +1,150 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+  <img width="1200" height="475" alt="Project Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+
+  <h1>ANNAS.DEV — Next-Gen Dynamic Portfolio</h1>
+
+  <p>
+    An interactive, highly polished developer portfolio featuring dynamic content synchronization, fluid UI animations, an embedded AI Assistant, and a fully functional Admin Dashboard.
+  </p>
+
+  <p>
+    <strong>🌍 Live Demo:</strong>
+    <a href="https://iam-annas.web.id">iam-annas.web.id</a>
+  </p>
+
+  <p>
+    <a href="#features"><strong>Features</strong></a> ·
+    <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+    <a href="#project-architecture"><strong>Architecture</strong></a> ·
+    <a href="#getting-started"><strong>Getting Started</strong></a> ·
+    <a href="#content-management--admin-access"><strong>Admin Panel</strong></a>
+  </p>
 </div>
 
-# Run and deploy your AI Studio app
+---
 
-This contains everything you need to run your app locally.
+# ✨ Features
 
-View your app in AI Studio: https://ai.studio/apps/9a7f24ff-4b79-46ba-9ca2-510e4b25f955
+- ⚡ **Dynamic Real-Time CMS Synchronization:** Powered by Firebase Firestore, ensuring that projects, professional experiences, skills, and about sections sync globally in real time without triggering rebuilds.
 
-## Run Locally
+- 🤖 **Integrated AI Assistant Widget:** Implements the native `@google/genai` SDK to offer an interactive chatbot directly on the landing page, capable of answering visitor inquiries regarding professional background and experience.
 
-**Prerequisites:**  Node.js
+- 🎨 **Highly Polished UI/UX:** Custom micro-interactions engineered with Framer Motion and Tailwind CSS, complete with custom cursors, fluid backdrop physics, scroll-linked navigation pills, and an engaging interactive "Sticker Wall".
 
+- 🔒 **Secure Admin Portal:** Seamless in-app management interface allowing rapid additions of projects, media assets, credentials, and real-time updates directly to remote file buckets via Supabase Storage.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- 📱 **Responsive & Accessible:** Optimized seamlessly across touch devices, wide desktop displays, and mobile views.
+
+---
+
+# 🛠️ Tech Stack
+
+## Frontend Core
+
+- **Framework:** React 19 + TypeScript + Vite
+- **Styling:** Tailwind CSS v4
+- **Animations:** Framer Motion
+- **Icons:** Lucide React
+- **Routing:** React Router v7
+
+## Backend Services & Cloud Storage
+
+- **Database:** Firebase Firestore (NoSQL Document Store)
+- **Asset Storage:** Supabase Storage Buckets (`portfolio` bucket)
+- **AI Engine:** Google Gemini API via `@google/genai` SDK
+
+---
+
+# 📁 Project Architecture
+
+```bash
+├── components/          # Reusable, standalone feature components (Chat, Hero, Screens)
+├── screen/              # Root-level interface views
+│   ├── PortfolioScreen  # Public dynamic frontend landing interface
+│   ├── AdminScreen      # Complete admin dashboard routing engine
+│   └── admin/           # Dedicated management views for specific portfolio entities
+├── services/            # Client handlers for cloud integrations
+│   ├── portfolioService # Global Firestore subscriptions and document seeding
+│   ├── geminiService    # Interaction wrappers handling API payloads for the chatbot
+│   └── supabase         # Dedicated instances managing object and asset storage
+├── types.ts             # Strict global TypeScript interfaces for documents and views
+└── constants.ts         # Immutable default fallback payloads and structured seed state
+```
+
+---
+
+# 🚀 Getting Started
+
+## Prerequisites
+
+- Node.js (`v20+` recommended)
+- A Firebase project configured with Firestore Database access
+- A Supabase project configured with a public storage bucket named `portfolio`
+- A Google Gemini API Key
+
+---
+
+## 1. Installation
+
+Clone the repository and install all required local workspace dependencies:
+
+```bash
+git clone https://github.com/yourusername/portfolio.git
+cd portfolio
+npm install
+```
+
+---
+
+## 2. Environment Variables
+
+Create a `.env.local` or `.env` file at the root of the directory containing the necessary keys:
+
+```env
+# Gemini API Setup
+VITE_GEMINI_API_KEY=your_gemini_api_key_here
+
+# Firebase Firestore Configuration
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+VITE_FIREBASE_APP_ID=your_firebase_app_id
+
+# Supabase Storage Configuration
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+---
+
+## 3. Local Execution
+
+Spin up the hot-reloading development build server:
+
+```bash
+npm run dev
+```
+
+Navigate to `http://localhost:5173/` to inspect the active application locally.
+
+Upon first launch, the data pipeline automatically provisions default fallback document states into your Firestore backend if collections are unpopulated.
+
+---
+
+# 🔐 Content Management & Admin Access
+
+To update content, view records, or push new files dynamically:
+
+- Navigate directly to `/admin` or invoke the admin access modal directly inside the portfolio UI.
+- Enter the secure access string when prompted.
+- Add, modify, or sync item descriptions, project metrics, media links, and resume payloads directly into real-time production modules.
+
+---
+
+# 📜 License
+
+This project is proprietary and intended for professional portfolio demonstration.
+
+Feel free to inspect the architecture and reference layout configurations.
