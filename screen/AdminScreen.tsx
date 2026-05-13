@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Loader2, Menu, Save, Smartphone, X } from 'lucide-react';
+import { Loader2, Menu, Save, Smartphone, X, LogOut } from 'lucide-react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { PortfolioContent, updatePortfolioContent, uploadMedia } from '../services/portfolioService';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
 import AdminSidebar from '../components/AdminSidebar';
 import AdminHeroPage from './admin/AdminHeroPage';
 import AdminProjectsPage from './admin/AdminProjectsPage';
@@ -11,6 +13,7 @@ import AdminCertificationsPage from './admin/AdminCertificationsPage';
 import AdminAwardsPage from './admin/AdminAwardsPage';
 import AdminSkillsPage from './admin/AdminSkillsPage';
 import AdminLanguagesPage from './admin/AdminLanguagesPage';
+import AdminConfigPage from './admin/AdminConfigPage';
 
 interface AdminScreenProps {
   content: PortfolioContent;
@@ -86,6 +89,16 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ content, onClose }) => {
             Save Changes
           </button>
           <button 
+            onClick={async () => {
+              await signOut(auth);
+              onClose();
+            }}
+            className="flex items-center gap-2 bg-white px-6 py-2 neo-brutal-border font-bold uppercase text-sm hover:translate-x-1 hover:-translate-y-1 transition-transform"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
+          <button 
             onClick={onClose}
             className="p-2 rounded-full hover:bg-ink-black/5 transition-colors"
           >
@@ -109,6 +122,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ content, onClose }) => {
                 <Route path="awards" element={<AdminAwardsPage />} />
                 <Route path="skills" element={<AdminSkillsPage />} />
                 <Route path="languages" element={<AdminLanguagesPage />} />
+                <Route path="config" element={<AdminConfigPage />} />
               </Route>
             </Routes>
           </div>

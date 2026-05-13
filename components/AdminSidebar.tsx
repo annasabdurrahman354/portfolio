@@ -17,6 +17,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen = false, onClose }) 
     { id: 'awards', label: 'Awards' },
     { id: 'skills', label: 'Skills' },
     { id: 'languages', label: 'Languages' },
+    { id: 'config', label: 'Configuration' },
   ];
 
   const navContent = (

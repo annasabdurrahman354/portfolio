@@ -75,7 +75,7 @@
 ## Prerequisites
 
 - Node.js (`v20+` recommended)
-- A Firebase project configured with Firestore Database access
+- A Firebase project configured with Firestore Database access AND Firebase Authentication (Email/Password enabled)
 - A Supabase project configured with a public storage bucket named `portfolio`
 - A Google Gemini API Key
 
@@ -93,25 +93,34 @@ npm install
 
 ---
 
-## 2. Environment Variables
+## 2. Configuration & Environment Variables
 
-Create a `.env.local` or `.env` file at the root of the directory containing the necessary keys:
+### Firebase Setup
+Update the `firebase-applet-config.json` file at the root of the directory with your Firebase client configuration:
+
+```json
+{
+  "projectId": "your_firebase_project_id",
+  "appId": "your_firebase_app_id",
+  "apiKey": "your_firebase_api_key",
+  "authDomain": "your_firebase_auth_domain",
+  "firestoreDatabaseId": "your_firestore_database_id",
+  "storageBucket": "your_firebase_storage_bucket",
+  "messagingSenderId": "your_messaging_sender_id",
+  "measurementId": ""
+}
+```
+
+### Environment Variables
+Create a `.env.local` or `.env` file at the root of the directory containing the remaining necessary keys:
 
 ```env
 # Gemini API Setup
 VITE_GEMINI_API_KEY=your_gemini_api_key_here
 
-# Firebase Firestore Configuration
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_firebase_auth_domain
-VITE_FIREBASE_PROJECT_ID=your_firebase_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_firebase_storage_bucket
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
-VITE_FIREBASE_APP_ID=your_firebase_app_id
-
 # Supabase Storage Configuration
 VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 ```
 
 ---
@@ -132,11 +141,15 @@ Upon first launch, the data pipeline automatically provisions default fallback d
 
 # 🔐 Content Management & Admin Access
 
+The application is secured via **Firebase Authentication** to ensure that your database and configuration files remain completely safe to expose publicly on GitHub.
+
 To update content, view records, or push new files dynamically:
 
-- Navigate directly to `/admin` or invoke the admin access modal directly inside the portfolio UI.
-- Enter the secure access string when prompted.
-- Add, modify, or sync item descriptions, project metrics, media links, and resume payloads directly into real-time production modules.
+1. **Prerequisite:** Create an admin user account in your Firebase Console under the **Authentication** tab.
+2. **Accessing the Portal:** Navigate directly to `/admin`, or invoke the admin access modal by typing the secret command (default: `open admin`) directly into the AI Chat assistant.
+3. **Authentication:** Log in using the email and password you configured in your Firebase Console.
+4. **Data Management:** Add, modify, or sync item descriptions, project metrics, media links, and resume payloads directly into real-time production modules.
+5. **Dynamic Configuration:** The AI chat secret trigger phrase can be customized securely on-the-fly directly from the **Configuration** tab within the Admin Dashboard!
 
 ---
 

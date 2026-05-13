@@ -1,7 +1,7 @@
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { supabase } from './supabase';
-import { Project, Experience, Education, Certification, Award, Skill, Language } from '../types';
+import { Project, Experience, Education, Certification, Award, Skill, Language, Config } from '../types';
 import * as initialData from '../constants';
 
 export interface PortfolioContent {
@@ -17,6 +17,7 @@ export interface PortfolioContent {
   awards: Award[];
   skills: Skill[];
   languages: Language[];
+  config?: Config;
 }
 
 const CONTENT_DOC_ID = 'main';
@@ -95,7 +96,11 @@ export const initializePortfolioData = async () => {
       certifications: initialData.CERTIFICATIONS,
       awards: initialData.AWARDS,
       skills: initialData.SKILLS,
-      languages: initialData.LANGUAGES
+      languages: initialData.LANGUAGES,
+      config: {
+        adminPassword: "annas3120",
+        chatSecretWord: "open admin"
+      }
     };
     await updatePortfolioContent(defaultContent);
   }

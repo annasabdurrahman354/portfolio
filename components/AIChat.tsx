@@ -9,9 +9,10 @@ import { ChatMessage } from '../types';
 
 interface AIChatProps {
   onAdminCommand?: () => void;
+  chatSecretWord?: string;
 }
 
-const AIChat: React.FC<AIChatProps> = ({ onAdminCommand }) => {
+const AIChat: React.FC<AIChatProps> = ({ onAdminCommand, chatSecretWord = 'open admin' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'model', text: "Hi! I'm Annas's digital assistant. Ask me anything about his experience, skills, or projects! ★" }
@@ -43,7 +44,7 @@ const AIChat: React.FC<AIChatProps> = ({ onAdminCommand }) => {
     const currentInput = input.trim();
     setInput('');
 
-    if (currentInput === 'open admin') {
+    if (currentInput.toLowerCase() === chatSecretWord.toLowerCase()) {
       setIsLoading(true);
       setTimeout(() => {
         setMessages(prev => [...prev, { role: 'model', text: 'Opening admin access modal... 🔒' }]);

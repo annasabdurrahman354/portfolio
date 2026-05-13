@@ -80,6 +80,11 @@ export interface ChatMessage {
   isError?: boolean;
 }
 
+export interface Config {
+  adminPassword?: string;
+  chatSecretWord?: string;
+}
+
 export enum Section {
   HERO = 'hero',
   PROJECTS = 'projects',

@@ -174,7 +174,7 @@ const PortfolioScreen: React.FC<PortfolioScreenProps> = ({ content, onAdminClick
       <AboutSection aboutText={hero.about} />
       <ContactSection />
       <FooterSection />
-      <AIChat onAdminCommand={onAdminClick} />
+      <AIChat onAdminCommand={onAdminClick} chatSecretWord={content.config?.chatSecretWord} />
 
     </div>
   );

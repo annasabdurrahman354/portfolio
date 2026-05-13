@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, Lock, Loader2 } from 'lucide-react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
 import AdminScreen from './screen/AdminScreen';
 import PortfolioScreen from './screen/PortfolioScreen';
 import { PortfolioContent, subscribeToPortfolioContent, initializePortfolioData } from './services/portfolioService';
@@ -10,14 +12,20 @@ const AdminLoginModal: React.FC<{
   onClose: () => void;
   onLogin: () => void;
 }> = ({ onClose, onLogin }) => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'annas3120') {
+    setIsLoggingIn(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       onLogin();
-    } else {
-      alert('Incorrect password');
+    } catch (error: any) {
+      alert(error.message || 'Login failed');
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -44,20 +52,32 @@ const AdminLoginModal: React.FC<{
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-xs font-bold uppercase text-ink-black/40">Secret Password</label>
+            <label className="text-xs font-bold uppercase text-ink-black/40">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-3 neo-brutal-border bg-bg-primary font-bold"
+              placeholder="admin@example.com"
+              autoFocus
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-bold uppercase text-ink-black/40">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-3 neo-brutal-border bg-bg-primary font-bold"
               placeholder="Enter password..."
-              autoFocus
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-action-blue py-3 neo-brutal-border font-bold uppercase tracking-widest hover:translate-x-1 hover:-translate-y-1 transition-transform"
+            disabled={isLoggingIn}
+            className="w-full bg-action-blue py-3 neo-brutal-border font-bold uppercase tracking-widest hover:translate-x-1 hover:-translate-y-1 transition-transform flex justify-center items-center gap-2"
           >
+            {isLoggingIn && <Loader2 className="w-4 h-4 animate-spin" />}
             Enter Dashboard
           </button>
         </form>
@@ -71,6 +91,7 @@ const AppContent: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -84,6 +105,20 @@ const AppContent: React.FC = () => {
       document.body.classList.remove('admin-mode');
     }
   }, [isAdminMode]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(!!user);
+      setIsAuthLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/admin') && !isLoggedIn && !isLoading && !isAuthLoading) {
+      setShowLogin(true);
+    }
+  }, [location.pathname, isLoggedIn, isLoading, isAuthLoading]);
 
   useEffect(() => {
     const init = async () => {
@@ -145,16 +180,8 @@ const AppContent: React.FC = () => {
               />
             ) : (
               <div className="min-h-screen bg-bg-primary flex flex-col items-center justify-center gap-6">
-                <p className="font-heading font-bold uppercase tracking-widest text-ink-black/60 text-xl">Access Denied</p>
-                <p className="text-ink-black/40 font-bold">Please login to access the admin dashboard.</p>
-                <div className="flex gap-4">
-                  <button onClick={() => setShowLogin(true)} className="bg-action-blue px-6 py-3 neo-brutal-border font-bold uppercase hover:translate-x-1 hover:-translate-y-1 transition-transform">
-                    Login
-                  </button>
-                  <button onClick={() => navigate('/')} className="bg-white px-6 py-3 neo-brutal-border font-bold uppercase hover:translate-x-1 hover:-translate-y-1 transition-transform">
-                    Go Back
-                  </button>
-                </div>
+                <p className="font-heading font-bold uppercase tracking-widest text-ink-black/60 text-xl">Authentication Required</p>
+                <Loader2 className="w-8 h-8 animate-spin text-action-blue" />
               </div>
             )
           } 
@@ -164,7 +191,12 @@ const AppContent: React.FC = () => {
       <AnimatePresence>
         {showLogin && (
           <AdminLoginModal
-            onClose={() => setShowLogin(false)}
+            onClose={() => {
+              setShowLogin(false);
+              if (location.pathname.startsWith('/admin')) {
+                navigate('/');
+              }
+            }}
             onLogin={handleAdminLogin}
           />
         )}
