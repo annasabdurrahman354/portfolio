@@ -28,6 +28,7 @@ export const getPortfolioContent = async (): Promise<PortfolioContent | null> =>
     const docRef = doc(db, CONTENT_COLLECTION, CONTENT_DOC_ID);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
+      console.log("Retrieved Data: ", docSnap.data());
       return docSnap.data() as PortfolioContent;
     }
     return null;
