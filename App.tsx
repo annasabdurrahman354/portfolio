@@ -126,6 +126,7 @@ const AppContent: React.FC = () => {
       const unsubscribe = subscribeToPortfolioContent((data) => {
         setContent(data);
         setIsLoading(false);
+        console.log("Updated Data: ", data);
       });
       return () => unsubscribe();
     };
