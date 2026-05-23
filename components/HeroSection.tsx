@@ -95,14 +95,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ hero }) => {
           <motion.a
             href={hero.resumeUrl}
             download
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1, duration: 0.6 }}
-            whileHover={{ x: 4, y: -4 }}
-            whileTap={{ x: 0, y: 0 }}
-            className="inline-flex items-center gap-2 mt-8 bg-action-blue text-white px-8 py-3 neo-brutal-border font-bold uppercase text-sm tracking-wide no-underline"
+            initial={{ opacity: 0, scale: 0, rotate: -20 }}
+            animate={{ opacity: 1, scale: 1, rotate: -3 }}
+            transition={{ type: "spring", delay: 1.2, stiffness: 200, damping: 15 }}
+            whileHover={{ scale: 1.08, rotate: 2 }}
+            whileTap={{ scale: 0.95, rotate: -1 }}
+            className="inline-flex items-center gap-3 mt-10 bg-sticker-yellow text-ink-black px-8 py-4 neo-brutal-border border-ink-black shadow-[6px_6px_0px_0px_rgba(30,30,30,1)] font-heading font-bold text-base md:text-lg uppercase tracking-wide no-underline sticker-effect"
           >
-            <Download className="w-4 h-4" />
+            <Download className="w-5 h-5" />
             Download Resume
           </motion.a>
         )}
