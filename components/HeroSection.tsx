@@ -1,11 +1,13 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { Download } from 'lucide-react';
 
 interface HeroSectionProps {
   hero: {
     title: string;
     subtitle: string;
     about: string;
+    resumeUrl?: string;
   };
 }
 
@@ -88,6 +90,22 @@ const HeroSection: React.FC<HeroSectionProps> = ({ hero }) => {
         >
           {hero.subtitle}
         </motion.p>
+
+        {hero.resumeUrl && (
+          <motion.a
+            href={hero.resumeUrl}
+            download
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1, duration: 0.6 }}
+            whileHover={{ x: 4, y: -4 }}
+            whileTap={{ x: 0, y: 0 }}
+            className="inline-flex items-center gap-2 mt-8 bg-action-blue text-white px-8 py-3 neo-brutal-border font-bold uppercase text-sm tracking-wide no-underline"
+          >
+            <Download className="w-4 h-4" />
+            Download Resume
+          </motion.a>
+        )}
       </motion.div>
 
       {/* MARQUEE */}

@@ -8,6 +8,7 @@ export interface PortfolioContent {
     title: string;
     subtitle: string;
     about: string;
+    resumeUrl?: string;
   };
   projects: Project[];
   experiences: Experience[];

@@ -10,7 +10,8 @@ const data = {
   hero: {
     title: "John Doe",
     subtitle: " ",
-    about: "A passionate software engineer with experience in full-stack web development and mobile applications. Skilled in modern frameworks and dedicated to building scalable, user-centered solutions."
+    about: "A passionate software engineer with experience in full-stack web development and mobile applications. Skilled in modern frameworks and dedicated to building scalable, user-centered solutions.",
+    resumeUrl: ""
   },
   projects: [
     {
