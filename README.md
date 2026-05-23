@@ -65,7 +65,10 @@
 │   ├── geminiService    # Interaction wrappers handling API payloads for the chatbot
 │   └── supabase         # Dedicated instances managing object and asset storage
 ├── types.ts             # Strict global TypeScript interfaces for documents and views
-└── constants.ts         # Immutable default fallback payloads and structured seed state
+├── constants.ts         # Immutable default fallback payloads and structured seed state
+├── populate-initial-data.mjs  # Manual script to seed Firestore with dummy content
+├── updated.json         # Snapshot of production portfolio data for restore
+└── firebase-applet-config.json  # Firebase client SDK configuration
 ```
 
 ---
@@ -135,7 +138,13 @@ npm run dev
 
 Navigate to `http://localhost:5173/` to inspect the active application locally.
 
-Upon first launch, the data pipeline automatically provisions default fallback document states into your Firestore backend if collections are unpopulated.
+The app will display a loading state until portfolio data exists in Firestore. To populate your Firestore database with initial dummy content, run:
+
+```bash
+node populate-initial-data.mjs
+```
+
+This script writes seed data to the `content/main` document only if it does not already exist, preventing accidental overwrites of live data. To restore from a production snapshot instead, temporarily modify the script to remove the existence check.
 
 ---
 

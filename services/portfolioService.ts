@@ -2,7 +2,6 @@ import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { supabase } from './supabase';
 import { Project, Experience, Education, Certification, Award, Skill, Language, Config } from '../types';
-import * as initialData from '../constants';
 
 export interface PortfolioContent {
   hero: {
@@ -34,7 +33,9 @@ export const getPortfolioContent = async (): Promise<PortfolioContent | null> =>
     return null;
   } catch (error) {
     console.error('Error fetching portfolio content:', error);
-    return null;
+    // Throw the error instead of returning null to prevent initializePortfolioData
+    // from assuming the document doesn't exist and overwriting the database.
+    throw error;
   }
 };
 
@@ -83,26 +84,5 @@ export const uploadMedia = async (file: File, path: string): Promise<string> => 
 };
 
 export const initializePortfolioData = async () => {
-  const existing = await getPortfolioContent();
-  if (!existing) {
-    const defaultContent: PortfolioContent = {
-      hero: {
-        title: "Annas Abdurrahman",
-        subtitle: "Software Engineer & Digital Strategist",
-        about: "I am an Informatics graduate with a strong passion for software engineering. My experience spans across full-stack web development (Frontend & Backend) and mobile systems (Native Android & React Native)."
-      },
-      projects: initialData.PROJECTS,
-      experiences: initialData.EXPERIENCES,
-      education: initialData.EDUCATION,
-      certifications: initialData.CERTIFICATIONS,
-      awards: initialData.AWARDS,
-      skills: initialData.SKILLS,
-      languages: initialData.LANGUAGES,
-      config: {
-        adminPassword: "annas3120",
-        chatSecretWord: "open admin"
-      }
-    };
-    await updatePortfolioContent(defaultContent);
-  }
+  console.warn('initializePortfolioData is disabled to prevent data loss.');
 };

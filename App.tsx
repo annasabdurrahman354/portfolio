@@ -6,7 +6,7 @@ import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
 import AdminScreen from './screen/AdminScreen';
 import PortfolioScreen from './screen/PortfolioScreen';
-import { PortfolioContent, subscribeToPortfolioContent, initializePortfolioData } from './services/portfolioService';
+import { PortfolioContent, subscribeToPortfolioContent } from './services/portfolioService';
 
 const AdminLoginModal: React.FC<{
   onClose: () => void;
@@ -121,16 +121,11 @@ const AppContent: React.FC = () => {
   }, [location.pathname, isLoggedIn, isLoading, isAuthLoading]);
 
   useEffect(() => {
-    const init = async () => {
-      await initializePortfolioData();
-      const unsubscribe = subscribeToPortfolioContent((data) => {
-        setContent(data);
-        setIsLoading(false);
-        console.log("Updated Data: ", data);
-      });
-      return () => unsubscribe();
-    };
-    init();
+    const unsubscribe = subscribeToPortfolioContent((data) => {
+      setContent(data);
+      setIsLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
 
   const handleAdminLogin = () => {
