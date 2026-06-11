@@ -100,7 +100,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ projects }) => {
               </div>
 
               {/* Content Side */}
-              <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-start md:overflow-y-auto relative bg-[#FDFCF8]">
+              <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-start overflow-y-auto relative bg-[#FDFCF8]" style={{ WebkitOverflowScrolling: 'touch' }}>
                 <motion.div
                   key={selectedProject.id}
                   initial={{ opacity: 0, x: 20 }}
